@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-lf7I9MK00Rpz2bRyDnnnAkJw1zxMF5IZ5Wh5i5nHH/0V7ujDzHqB3ovYvsk0ceJlNimk/hx1/NQ8RvZMSrTQcQ==" crossorigin="anonymous" />
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-**************" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js" integrity="sha512-******************************" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha512-*******************************************" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+	
+    <!-- Load Highcharts library -->
+    <Title>ZTL Stock Exchange</Title>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <style>
+        /* Make the table larger */
+        .table-responsive {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        /* Center the table horizontally */
+        .text-center {
+            text-align: center !important;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #BBB5C6;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 24px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        form {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form label {
+            font-size: 24px;
+            margin-right: 20px;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: none;
+            background-color: #f2f2f2;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Zephyr Textiles Limited(ZTL) Stock Exchange Dashboard</h1>
+        <div id="chart-container"></div>
+    </div>
+
+    <div class="container">
+        <table class="table">
+            <thead>
+                <center><tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr></center>
+            </thead>
+        <tbody>
+            <tr>
+                <td>R-squared</td>
+                <td>{{ r2 }}</td>
+            </tr>
+            <tr>
+                <td>Mean Squared Error</td>
+                <td>{{ mse }}</td>
+            </tr>
+            <tr>
+                <td>Mean Absolute Error</td>
+                <td>{{ mae }}</td>
+            </tr>
+        </tbody>
+  </table>
+</div>
+
+<div class="container">
+    <form id="form" method="GET" action="/input">
+	    
+        <label for="invest">Click Here if you want to invest and check your predicted outcome</label>
+		<input type="submit" id="invest" name="invest" value="Next">
+    </form>
+</div>
+	
+	
+    <!-- JavaScript code to create the chart -->
+    <script>
+        var data = {{ chart_data|safe }};
+        Highcharts.chart('chart-container', {
+            title: {
+                text: 'High Low Chart'
+            },
+            xAxis: {
+                categories: data.map(function (row) {
+                    return row[0];
+                })
+            },
+            yAxis: {
+                title: {
+                    text: 'Values'
+                }
+            },
+            series: [{
+                name: 'High',
+                data: data.map(function (row) {
+                    return row[1];
+                })
+            }, {
+                name: 'Low',
+                data: data.map(function (row) {
+                    return row[2];
+                })
+            }]
+        });
+    </script>
+	
+	
+</body>
+</html>
